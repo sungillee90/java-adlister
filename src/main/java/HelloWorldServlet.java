@@ -10,15 +10,20 @@ import java.io.PrintWriter;
 public class HelloWorldServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+
         res.setContentType("text/html");
         PrintWriter out = res.getWriter();
-        out.println("<h1>Hello, World!</h1>");
+
+        String name = req.getParameter("name");
+        System.out.println("name param = " + name);
+        if(name == null) {
+            out.println("<h1>Hello, World!</h1>");
+        } else {
+            out.println("Hello, " + name + "!");
+        }
     }
 }
 
-//    Create a page that displays a number that goes up by one every time the /count page is viewed.
-@WebServlet(name = "CountsPageViewd", urlPatterns = "/count")
 
 
-
-// http://localhost:8081/hello
+// http://localhost:8080/hello
