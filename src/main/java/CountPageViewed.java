@@ -12,10 +12,22 @@ public class CountPageViewed extends HttpServlet {
     int counter = 0; // initializing the counter
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        counter ++;
+
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+
+        try {
+            if((request.getParameter("reset")).equals("1")) {
+                counter = 0;
+            }
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
+        }
+
+        counter ++;
         out.println("Counter : <strong> " + counter + "</strong>");
 
     }
 }
+
+//Allow the user to pass a parameter in the query string to reset the counter.
