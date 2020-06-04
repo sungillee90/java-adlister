@@ -13,6 +13,8 @@
 </head>
 <body>
     <% request.setAttribute("isAdmin", true); %>
+    <% request.setAttribute("numbers", new int[]{1, 2, 3, 4, 5, 6, 7}); %>
+
     <c:choose>
         <c:when test = "${isAdmin}">
             <p>Welcome Admin User!</p>
@@ -27,6 +29,12 @@
             Secrete Admin Stuff
         </p>
     </c:if>
+
+    <ul>
+        <c:forEach items="${numbers}" var="number">
+            <li>${number}</li>
+        </c:forEach>
+    </ul>
 
 </body>
 </html>
