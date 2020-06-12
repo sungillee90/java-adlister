@@ -38,12 +38,21 @@ public class MySQLAdsDao implements Ads {
         }
     }
 
+    // Refactor your MySQLAdsDao to use prepared statements.
+    // Test these changes and ensure everything still works.
     @Override
     public Long insert(Ad ad) {
         try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(createInsertQuery(ad), Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = stmt.getGeneratedKeys();
+            PreparedStatement pstmt = connection.prepareStatement(createInsertQuery(), Statement.RETURN_GENERATED_KEYS);
+//            Statement stmt = connection.createStatement();
+            pstmt.setLong(1, ad.getUserId());
+            pstmt.setString(2, ad.getTitle());
+            pstmt.setString(3, ad.getDescription());
+
+            pstmt.executeUpdate();
+
+//            pstmt.executeUpdate(createInsertQuery(ad), Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = pstmt.getGeneratedKeys();
             rs.next();
             return rs.getLong(1);
         } catch (SQLException e) {
@@ -51,11 +60,11 @@ public class MySQLAdsDao implements Ads {
         }
     }
 
-    private String createInsertQuery(Ad ad) {
-        return "INSERT INTO ads(user_id, title, description) VALUES "
-            + "(" + ad.getUserId() + ", "
-            + "'" + ad.getTitle() +"', "
-            + "'" + ad.getDescription() + "')";
+    private String createInsertQuery() {
+        return "INSERT INTO ads(user_id, title, description) VALUES (?, ?, ?)";
+//            + "(" + ad.getUserId() + ", "
+//            + "'" + ad.getTitle() +"', "
+//            + "'" + ad.getDescription() + "')";
     }
 
     private Ad extractAd(ResultSet rs) throws SQLException {
